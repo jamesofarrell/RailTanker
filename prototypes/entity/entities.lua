@@ -61,7 +61,7 @@ data:extend(
 	order="z",
     fluid_box =
     {
-      base_area = 125,
+      base_area = 250,
       --pipe_covers = pipecoverspictures(),
       pipe_connections =
       {
@@ -209,7 +209,7 @@ data:extend(
 	order="z",
     fluid_box =
     {
-      base_area = 125,
+      base_area = 250,
       -- pipe_covers = pipecoverspictures(),
       pipe_connections =
       {
