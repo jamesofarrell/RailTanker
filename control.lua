@@ -127,11 +127,11 @@ destroyProxyies = function(val)
 	return false
 end
 
-game.on_event(defines.events.on_preplayer_mined_item, entityRemoved)
-game.on_event(defines.events.on_robot_pre_mined, entityRemoved)
-game.on_event(defines.events.on_entity_died, entityRemoved)
+script.on_event(defines.events.on_preplayer_mined_item, entityRemoved)
+script.on_event(defines.events.on_robot_pre_mined, entityRemoved)
+script.on_event(defines.events.on_entity_died, entityRemoved)
 
--- game.on_event(defines.events.on_entity_died, function(event)
+-- script.on_event(defines.events.on_entity_died, function(event)
 	-- local removeValue
 	-- if isTankerEntity(event.entity) and global.tankers ~= nil then
 		-- local position = event.entity.position
@@ -182,7 +182,7 @@ entityBuilt = function(event)
 	end
 end
 
-game.on_load(function()
+script.on_load(function()
 	reattachProxies(global.tankers)
 	if global.manualTankers ~= nil then
 		game.on_event(defines.events.on_tick, onTickMain)
@@ -207,8 +207,8 @@ function reattachProxy(tanker)
 	end
 end
 
-game.on_event(defines.events.on_built_entity, entityBuilt)
-game.on_event(defines.events.on_robot_built_entity, entityBuilt)
+script.on_event(defines.events.on_built_entity, entityBuilt)
+script.on_event(defines.events.on_robot_built_entity, entityBuilt)
 
   -- -- normal state - following the path
   -- on_the_path = 0,
@@ -233,7 +233,7 @@ game.on_event(defines.events.on_robot_built_entity, entityBuilt)
 
 -- local stateChanges = {0 = function(train)
 
-game.on_event(defines.events.on_train_changed_state, function(event)
+script.on_event(defines.events.on_train_changed_state, function(event)
 	local train = event.train
 	local tankers = filter(isTankerEntity, train.carriages)
 	for i,entity in ipairs(tankers) do
