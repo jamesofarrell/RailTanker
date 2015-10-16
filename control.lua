@@ -52,7 +52,7 @@ end
 
 onTickMain = function(event)
 	if global.manualTankers == nil then
-		game.on_event(defines.events.on_tick, nil)
+		script.on_event(defines.events.on_tick, nil)
 	elseif event.tick % 20 == 16 then
 		for i,tanker in ipairs(global.manualTankers) do
 			if isValid(tanker.entity) then
@@ -111,7 +111,7 @@ entityRemoved = function (event)
 		end
 	end
 end
--- game.on_event(defines.events.on_tick, function(event)
+-- script.on_event(defines.events.on_tick, function(event)
 
 -- end)
 
@@ -156,7 +156,7 @@ entityBuilt = function(event)
 		if not isTankerMoving(tanker) then
 			tanker.proxy=createProxy(entity.position, tanker.fluidbox, entity.surface)
 			--table.insert(valueOrNewTable(global.stoppedTankers), tanker)
-			--game.on_event(defines.events.on_tick, onTickMain)
+			--script.on_event(defines.events.on_tick, onTickMain)
 		end
 		global.tankers = valueOrNewTable(global.tankers)
 		table.insert(global.tankers, tanker)
@@ -166,7 +166,7 @@ entityBuilt = function(event)
 			global.manualTankers = valueOrNewTable(global.manualTankers)
 			table.insert(global.manualTankers, tanker)
 			debugLog("manual tanker: " .. #global.manualTankers)
-			game.on_event(defines.events.on_tick, onTickMain)
+			script.on_event(defines.events.on_tick, onTickMain)
 		end
 	elseif isPumpEntity(entity) then
 		local position = entity.position
@@ -182,10 +182,15 @@ entityBuilt = function(event)
 	end
 end
 
-script.on_load(function()
+function onTickAfterLoad(event)
 	reattachProxies(global.tankers)
+  onTickMain(event)
+  script.on_event(defines.events.on_tick, onTickMain)
+end
+
+script.on_load(function()
 	if global.manualTankers ~= nil then
-		game.on_event(defines.events.on_tick, onTickMain)
+		script.on_event(defines.events.on_tick, onTickAfterLoad)
 	end
 end)
 
@@ -257,12 +262,12 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 			--local tanker = {entity = entity, proxy=createProxy(entity.position), fluidbox = tanker.proxy.fluidbox[1][1]}
 			tanker.proxy = createProxy(entity.position, tanker.fluidbox, entity.surface)
 			--table.insert(valueOrNewTable(global.stoppedTankers), tanker)
-			--game.on_event(defines.events.on_tick, onTickMain)
+			--script.on_event(defines.events.on_tick, onTickMain)
 		elseif state == 8 or state == 9 then -- Manual Control, WHY IS THERE ONE TRAIN STATE FOR MANUAL CONTROL? COZ FUCK YOU THATS WHY!
 			--debugLog("Train Manual " .. i)
 			global.manualTankers = valueOrNewTable(global.manualTankers)
 			table.insert(global.manualTankers, tanker)
-			game.on_event(defines.events.on_tick, onTickMain)
+			script.on_event(defines.events.on_tick, onTickMain)
 		else --moving
 			--debugLog("Train moving" .. i)
 			--global.stoppedTankers = remove_if(function (val) return entity.equals(val.entity) end, global.stoppedTankers)
